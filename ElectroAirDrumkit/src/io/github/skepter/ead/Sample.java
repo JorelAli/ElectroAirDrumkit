@@ -156,10 +156,14 @@ class SampleListener extends Listener {
                     		if(swipe.direction().getY() < 0){
 //                        	SwipeGesture previousUpdate = new SwipeGesture(controller.frame(1).gesture(swipe.id()));
 //                        	if(previousUpdate.position().getY() > swipe.position().getY()) {
-                        		if(swipe.position().getX() < 0) {
-                        			Utilities.playSound(SoundType.BASS_DRUM_A1);
-                        		} else {
-                        			Utilities.playSound(SoundType.CRASH1);
+                        		if(swipe.position().getX() > 125) {
+                        			Utilities.playSound((SoundType) Main.instance.farRightDrum.getSelectedItem());
+                        		} else if (swipe.position().getX() < 125 && swipe.position().getX() > 0 ){
+                        			Utilities.playSound((SoundType) Main.instance.rightDrum.getSelectedItem());
+                        		} else if (swipe.position().getX() < -125){
+                        			Utilities.playSound((SoundType) Main.instance.farLeftDrum.getSelectedItem());
+                        		} else if (swipe.position().getX() > -125 && swipe.position().getX() < 0 ){
+                        			Utilities.playSound((SoundType) Main.instance.leftDrum.getSelectedItem());
                         		}
                         	}
 //                        }
@@ -216,9 +220,9 @@ class SampleListener extends Listener {
 }
 
 class Sample {
-    public static void main(String[] args) {
-    	
-        // Create a sample listener and controller
+	
+	public Sample() {
+		// Create a sample listener and controller
         SampleListener listener = new SampleListener();
         Controller controller = new Controller();
 
@@ -235,7 +239,5 @@ class Sample {
 
         // Remove the sample listener when done
         controller.removeListener(listener);
-        
-    		
-    }
+	}
 }
