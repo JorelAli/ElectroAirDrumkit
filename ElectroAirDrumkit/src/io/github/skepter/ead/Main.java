@@ -2,7 +2,6 @@ package io.github.skepter.ead;
 
 import io.github.skepter.ead.Utilities.SoundType;
 
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -13,14 +12,8 @@ import javax.swing.JFrame;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import com.leapmotion.leap.Controller;
-import com.leapmotion.leap.Frame;
-import com.leapmotion.leap.Gesture;
-import com.leapmotion.leap.Gesture.State;
-import com.leapmotion.leap.GestureList;
-import com.leapmotion.leap.Listener;
-import com.leapmotion.leap.SwipeGesture;
 
-public class Main extends Listener {
+public class Main {
 
 	private JFrame frame;
 	public static Main instance;
@@ -32,81 +25,23 @@ public class Main extends Listener {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Main window = new Main();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					new Sample();
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-	}
-
-	/**
-	 * Leap motion stuff
-	 */
-
-	public void onConnect(Controller controller) {
-		System.out.println("#Connected#");
-		controller.enableGesture(Gesture.Type.TYPE_SWIPE);
-		controller.enableGesture(Gesture.Type.TYPE_CIRCLE);
-		controller.enableGesture(Gesture.Type.TYPE_SCREEN_TAP);
-		controller.enableGesture(Gesture.Type.TYPE_KEY_TAP);
-	}
 	
-	public void onExit(Controller controller) {
-        System.out.println("Exited");
-    }
-
-	public void onFrame(Controller controller) {
-		Frame frame = controller.frame();
-
-		GestureList gestures = frame.gestures();
-		for (int i = 0; i < gestures.count(); i++) {
-			Gesture gesture = gestures.get(i);
-			switch (gesture.type()) {
-				case TYPE_SWIPE:
-					SwipeGesture swipe = new SwipeGesture(gesture);
-					if (swipe.state() == State.STATE_STOP) {
-						if (swipe.direction().getY() < 0) {
-							if (swipe.position().getX() > 125) {
-								Utilities.playSound((SoundType) Main.instance.farRightDrum.getSelectedItem());
-							} else if (swipe.position().getX() < 125 && swipe.position().getX() > 0) {
-								Utilities.playSound((SoundType) Main.instance.rightDrum.getSelectedItem());
-							} else if (swipe.position().getX() < -125) {
-								Utilities.playSound((SoundType) Main.instance.farLeftDrum.getSelectedItem());
-							} else if (swipe.position().getX() > -125 && swipe.position().getX() < 0) {
-								Utilities.playSound((SoundType) Main.instance.leftDrum.getSelectedItem());
-							}
-						}
-					}
-				default:
-					break;
-			}
-		}
+    Controller controller = new Controller();
+    public SampleListener sample;
+	
+	public static void main(String[] args) {
+		Main window = new Main();
+		window.frame.setVisible(true);
 	}
 
-	// ///////////////////////
 
 	/**
 	 * Create the application.
 	 */
 	public Main() {
 		initialize();
-        Controller controller = new Controller();
-        controller.addListener(this);
+		sample = new SampleListener();
+		controller.addListener(sample);
 	}
 
 	/**

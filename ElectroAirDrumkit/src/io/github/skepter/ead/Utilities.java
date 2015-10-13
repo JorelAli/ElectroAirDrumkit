@@ -100,6 +100,7 @@ public class Utilities {
 	
 	public static void playSound(SoundType sound) {
 		try {
+			System.out.println(sound.getSoundName());
 			Clip clip = AudioSystem.getClip();
 			AudioInputStream inputStream = AudioSystem.getAudioInputStream(Sample.class.getResourceAsStream("/resources/" + sound.getSoundName() + ".wav"));			
 			clip.open(inputStream);
